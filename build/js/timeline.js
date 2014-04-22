@@ -4386,10 +4386,10 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 				trace("WEB THUMB CREATE");
 				
 				//var thumb_url	= "//api.pagepeeker.com/v2/thumbs.php?";
-					var thumb_url = '/thumbnails/';
-//					console.debug("M: ", m);
+					var thumb_url = typeof config.thumbnail_url !== 'undefined' ? config.thumbnail_url : '/thumbnails/';
+
 					url		      	= m.id.replace("http://", "");//.split("/")[0];
-					url           = url.replace("https://","");
+//					url           = url.replace("https://","");
 					url           = url + '&clipRect=%7B"top"%3A0%2C"left"%3A0%2C"width"%3A1280%2C"height"%3A800%7D&delay=1000';
 
 				// Main Image
