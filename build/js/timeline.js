@@ -106,7 +106,7 @@ if (typeof VMM == 'undefined') {
 	
 	/* Debug
 	================================================== */
-	VMM.debug = true;
+	VMM.debug = false;
 	
 	/* Master Config
 	================================================== */
@@ -127,10 +127,11 @@ if (typeof VMM == 'undefined') {
 		vp:				"Pellentesque nibh felis, eleifend id, commodo in, interdum vitae, leo",
 		
 		api_keys_master: {
-			flickr:		"RAIvxHY4hE/Elm5cieh4X5ptMyDpj7MYIxziGxi0WGCcy1s+yr7rKQ==",
-			//google:		"jwNGnYw4hE9lmAez4ll0QD+jo6SKBJFknkopLS4FrSAuGfIwyj57AusuR0s8dAo=",
-			google:		"uQKadH1VMlCsp560gN2aOiMz4evWkl1s34yryl3F/9FJOsn+/948CbBUvKLN46U=",
-			twitter:	""
+				flickr:		"RAIvxHY4hE/Elm5cieh4X5ptMyDpj7MYIxziGxi0WGCcy1s+yr7rKQ==",
+				//google:		"jwNGnYw4hE9lmAez4ll0QD+jo6SKBJFknkopLS4FrSAuGfIwyj57AusuR0s8dAo=",
+				google:		"uQKadH1VMlCsp560gN2aOiMz4evWkl1s34yryl3F/9FJOsn+/948CbBUvKLN46U=",
+				twitter:	"",
+				facebook: 'AAAEMGphNN4QBANf8Ecid1W5yZA8pnz7wUevQvdg9EfZCsUQ33j3tENkVCpT9mEVCEUGu7H8DHnVQKLMDLZCI6IynJJMilbAyNdoQzvwdAZDZD'
 		},
 		
 		timers: {
@@ -1502,9 +1503,9 @@ if(typeof VMM != 'undefined' && typeof VMM.Date == 'undefined') {
 					if (p.millisecond || p.second && d.getSeconds() >= 1) {
 						// YEAR MONTH DAY HOUR MINUTE
 						if (is_abbr){
-							format = VMM.Date.dateformats.time_short; 
+							format = VMM.Date.dateformats.full; 
 						} else {
-							format = VMM.Date.dateformats.time_short;
+							format = VMM.Date.dateformats.full;
 						}
 					} else if (p.minute) {
 						// YEAR MONTH DAY HOUR MINUTE
@@ -2777,7 +2778,8 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 			vp:			"Pellentesque nibh felis, eleifend id, commodo in, interdum vitae, leo",
 			flickr:		"RAIvxHY4hE/Elm5cieh4X5ptMyDpj7MYIxziGxi0WGCcy1s+yr7rKQ==",
 			google:		"jwNGnYw4hE9lmAez4ll0QD+jo6SKBJFknkopLS4FrSAuGfIwyj57AusuR0s8dAo=",
-			twitter:	""
+			twitter:	"",
+				facebook: 'AAAEMGphNN4QBANf8Ecid1W5yZA8pnz7wUevQvdg9EfZCsUQ33j3tENkVCpT9mEVCEUGu7H8DHnVQKLMDLZCI6IynJJMilbAyNdoQzvwdAZDZD'
 		},
 		
 		init: function() {
@@ -3188,7 +3190,8 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 			},
 			
 			create: function(m) {
-				VMM.ExternalAPI.googlemaps.createAPIMap(m);
+				//VMM.ExternalAPI.googlemaps.createAPIMap(m);
+					VMM.ExternalAPI.googlemaps.createiFrameMap(m);
 			},
 			
 			createiFrameMap: function(m) {
@@ -3199,6 +3202,10 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 				mc				+= "<div class='google-map' id='" + unique_map_id + "' style='width=100%;height=100%;'>";
 				mc				+= "<iframe width='100%' height='100%' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='" + embed_url + "'></iframe>";
 				mc				+= "</div>";
+
+/*
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d60802.61274322286!2d168.32336949999998!3d-17.7369433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1397690603737" width="400" height="300" frameborder="0" style="border:0"></iframe>
+*/
 				
 				VMM.attachElement("#" + m.uid, mc);
 				
@@ -3458,9 +3465,9 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 								}
 							} else {
 								trace("USING SIMPLE IFRAME MAP EMBED");
-								if (m.id[0].match("https")) { 
-									m.id = m.url[0].replace("https", "http");
-								}
+								//if (m.id[0].match("https")) { 
+								//	m.id = m.url[0].replace("https", "http");
+								//}
 								VMM.ExternalAPI.googlemaps.createiFrameMap(m);
 							}
 							
@@ -3871,6 +3878,39 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 			}
 		
 		},
+
+/*
+		facebook: {
+			
+			get: function(m) {
+				VMM.master_config.facebook.que.push(m);
+				VMM.master_config.facebook.active = true;
+			},
+			
+			create: function(m) {
+
+				if (VMM.master_config.Timeline.api_keys.facebook != "") {
+						api_key = VMM.master_config.Timeline.api_keys.facebook;
+				}
+				var mediaElem = ""; 
+				if (m.id.match(/facebook.com/i)) {
+					mediaElem	=	"<iframe class='fb' frameborder='0' width='100%' height='100%' src='" + m.id + "&access_token=" + api_key + "'></iframe>";
+				} else {
+					mediaElem	=	"<iframe class='fb' frameborder='0' width='100%' height='100%' src='" + "https://graph.facebook.com/$post_id/comments?" + m.id + "&access_token=" + api_key + "'></iframe>";
+				}
+				VMM.attachElement("#"+m.uid, mediaElem);
+			},
+			
+			pushQue: function() {
+				
+				for(var i = 0; i < VMM.master_config.facebook.que.length; i++) {
+					VMM.ExternalAPI.googledocs.create(VMM.master_config.facebook.que[i]);
+				}
+				VMM.master_config.facebook.que = [];
+			}
+		
+		},
+*/
 		
 		flickr: {
 			
@@ -4345,14 +4385,18 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 			create: function(m) {
 				trace("WEB THUMB CREATE");
 				
-				var thumb_url	= "//api.pagepeeker.com/v2/thumbs.php?";
-					url			= m.id.replace("http://", "");//.split("/")[0];
-					
+				//var thumb_url	= "//api.pagepeeker.com/v2/thumbs.php?";
+					var thumb_url = '/thumbnails/';
+//					console.debug("M: ", m);
+					url		      	= m.id.replace("http://", "");//.split("/")[0];
+					url           = url.replace("https://","");
+					url           = url + '&clipRect=%7B"top"%3A0%2C"left"%3A0%2C"width"%3A1280%2C"height"%3A800%7D&delay=1000';
+
 				// Main Image
-				VMM.attachElement("#" + m.uid, "<a href='" + m.id + "' target='_blank'><img src='" + thumb_url + "size=x&url=" + url + "'></a>");
+				VMM.attachElement("#" + m.uid, "<a href='" + m.id + "' target='_blank'><img src='" + thumb_url + "?url=" + url + "'></a>");
 				
 				// Thumb
-				VMM.attachElement("#" + m.uid + "_thumb", "<img src='" + thumb_url + "size=t&url=" + url + "'>");
+				VMM.attachElement("#" + m.uid + "_thumb", "<img src='" + thumb_url + "?url=" + url + "'>");
 			},
 			
 			pushQue: function() {
@@ -4683,9 +4727,10 @@ if(typeof VMM != 'undefined' && typeof VMM.MediaType == 'undefined') {
 			}
 			media.type = "twitter";
 			success = true;
-		} else if (d.match("maps.google") && !d.match("staticmap")) {
-			media.type = "google-map";
+		} else if ((d.match("maps.google") || d.match('google.com\/maps')) && !d.match("staticmap")) {
+				media.type = "google-map";
 		    media.id = d.split(/src=['|"][^'|"]*?['|"]/gi);
+				console.debug ("Google map: " , media);
 			success = true;
 		} else if (d.match("plus.google")) {
 			media.type = "googleplus";
@@ -5247,6 +5292,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			VMM.Lib.width($slides_items, (slides.length * config.slider.content.width));
 			
 			if (_from_start) {
+				current_slide = typeof slides[current_slide] !== 'undefined' ? current_slide : 0;
 				VMM.Lib.css($slider_container, "left", slides[current_slide].leftpos());
 			}
 			
@@ -5311,6 +5357,12 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 		}
 		/* NAVIGATION
 		================================================== */
+		// We're getting double keypress events in some situations. Need to curb them
+		var now           = new Date();
+		var then          = new Date();
+		var last_keypress = then.getTime();
+		var this_keypress = now.getTime();
+
 		function onNextClick(e) {
 			if (current_slide == slides.length - 1) {
 				backToCurrentSlide();
@@ -5329,8 +5381,63 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			}
 		}
 
+		function gotoFirst(e){
+			goToSlide(0);
+			upDate();
+		}
+
+    function gotoLast(e) {
+			goToSlide(slides.length-1);
+			upDate();
+		}
+
+		// We should really calculate the distance of the page, find out how many
+		// slides are present and move by that amount, but... no.
+		function goBackTen(e) {
+			var slide_num = current_slide - 10 < 0 ? 0 : current_slide - 10;
+			goToSlide(slide_num);
+			upDate();
+		}
+
+		function goForwardTen(e) {
+			var slide_num = current_slide + 10 >= slides.length ? slides.length -1 : current_slide + 10;
+			goToSlide(slide_num);
+			upDate();
+		}
+
 		function onKeypressNav(e) {
+
+			// It's awkward watching the page below slide around when you're editing/adding a record
+			if (config.modal_open){
+					return;
+			}
+
+			last_keypress = this_keypress;
+			now           = new Date(); 
+			this_keypress = now.getTime();
+
+			// Avoid erroneous double key events.
+			if (this_keypress - last_keypress <= 300){ // milliseconds
+					return;
+			}
+
 			switch(e.keyCode) {
+				case 33: 
+					// PageUP
+					goBackTen(e);
+					break;
+				case 34: 
+					// PageDOWN
+					goForwardTen(e);
+					break;
+				case 35: 
+					// END
+					gotoLast(e);
+					break;
+				case 36: 
+					// HOME
+					gotoFirst(e);
+					break;
 				case 39:
 					// RIGHT ARROW
 					onNextClick(e);
@@ -5669,7 +5776,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			VMM.ExternalAPI.youtube.stopPlayers();
 			
 			// Set current slide
-			current_slide	= n;
+			current_slide	= n <= (slides.length -1) ? n : slides.length -1;
 			_pos			= slides[current_slide].leftpos();
 			
 			
@@ -6052,6 +6159,10 @@ if (typeof VMM.Slider != 'undefined') {
 			}
 		}
 		
+		var addTag = function (tag_name) { 
+				console.debug("Clicked ", tag_name); 
+		};
+
 		var buildSlide = function() {
 			trace("BUILDSLIDE");
 			$wrap	= VMM.appendAndGetElement(element, "<div>", "content");
@@ -6068,9 +6179,11 @@ if (typeof VMM.Slider != 'undefined') {
 						/* TAG / CATEGORY
 						================================================== */
 						if (data.tag != null && data.tag != "") {
-							tag		= VMM.createElement("span", data.tag, "slide-tag");
+							tag		= VMM.createElement("span", data.tag, "slide-tag " + data.tag);
 						}
-						
+
+//						VMM.bindEvent(".slide-tag", addTag(data.tag), 'click');
+
 						if (st != en) {
 							c.text += VMM.createElement("h2", st + " &mdash; " + en + tag, "date");
 						} else {
@@ -6103,6 +6216,8 @@ if (typeof VMM.Slider != 'undefined') {
 				//$text		=	VMM.appendAndGetElement($slide, "<div>", "text", c.text);
 				
 				$text		= VMM.appendAndGetElement($slide, "<div>", "text", VMM.TextElement.create(c.text));
+
+//				VMM.bindEvent(".tag", addTag());
 				
 			}
 			
@@ -7120,7 +7235,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			if (VMM.Browser.device == "mobile" || VMM.Browser.device == "tablet") {
 				config.touch = true;
 			}
-			
+			console.debug("Width: ", config.width);
 			config.nav.width			= config.width;
 			config.nav.height			= 200;
 			config.feature.width		= config.width;
@@ -7161,13 +7276,14 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			timenav		= new VMM.Timeline.TimeNav($navigation);
 			
 			if (!has_width) {
-				config.width = VMM.Lib.width($timeline);
+				// hard code the max because 100% looks awkward
+				config.width = VMM.Lib.width($timeline, '98%');
 			} else {
 				VMM.Lib.width($timeline, config.width);
 			}
 
 			if (!has_height) {
-				config.height = VMM.Lib.height($timeline);
+				config.height = VMM.Lib.height($timeline, 600);
 			} else {
 				VMM.Lib.height($timeline, config.height);
 			}
@@ -7363,9 +7479,36 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		this.iframeLoaded = function() {
 			trace("iframeLoaded");
 		};
-		
+
+    this.reset = function() {
+        config.current_slide = 0;
+        slider.setSlide(0);
+        timenav.setMarker(0, config.ease,config.duration);
+    }
+
+		this.reload = function(d,_s) {
+				console.debug("Load new timeline data: " ,  d());
+				VMM.fireEvent(global, config.events.messege, config.language.messages.loading_timeline);
+				data = {};
+				var new_config = d();
+				VMM.Timeline.DataObj.getData(new_config);
+				config.current_slide = (typeof _s == 'undefined') ? 0 : _s;
+				current_slide = config.current_slide;
+				slider.setSlide(config.current_slide);
+        timenav.setMarker(config.current_slide, config.ease,config.duration);
+		};
+			
+	  this.get_config = function (){
+				return config;
+		}
+
+		this.set_config_item = function(name,value){
+				config[name] = value;
+		};
+
+/*
 		this.reload = function(_d) {
-			trace("Load new timeline data" + _d);
+			trace("Load new timeline data" , -d);
 			VMM.fireEvent(global, config.events.messege, config.language.messages.loading_timeline);
 			data = {};
 			VMM.Timeline.DataObj.getData(_d);
@@ -7373,6 +7516,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			slider.setSlide(0);
 			timenav.setMarker(0, config.ease,config.duration);
 		};
+*/
 		
 		/* DATA 
 		================================================== */
@@ -7959,7 +8103,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				is_last		= false,
 				is_first	= false;
 			
-			current_marker = 	n;
+			current_marker = 	n <= (markers.length -1) ? n : markers.length -1;
 			
 			timenav_pos.left			= (config.width/2) - markers[current_marker].pos_left
 			timenav_pos.visible.left	= Math.abs(timenav_pos.left) - 100;
@@ -9173,6 +9317,17 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			}
 			
 			// CREATE TAGS
+			var tag_counts = [];
+			tags.forEach(function(item){
+
+					if (typeof tag_counts[item] === 'undefined') {
+							tag_counts[item] = 1;
+					}
+					else {
+							tag_counts[item]++;
+					}
+			});
+
 			tags = VMM.Util.deDupeArray(tags);
 			if (tags.length > 3) {
 				config.nav.rows.current = config.nav.rows.half;
@@ -9181,16 +9336,20 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			}
 			for(k = 0; k < tags.length; k++) {
 				if (k < config.nav.rows.current.length) {
-					var tag_element = VMM.appendAndGetElement($timebackground, "<div>", "timenav-tag");
+					var tag_element = VMM.appendAndGetElement($timebackground, "<div>", "timenav-tag ");
+					VMM.Lib.addClass(tag_element, tags[k]);	
 					VMM.Lib.addClass(tag_element, "timenav-tag-row-" + (k+1));
 					if (tags.length > 3) {
 						VMM.Lib.addClass(tag_element, "timenav-tag-size-half");
 					} else {
 						VMM.Lib.addClass(tag_element, "timenav-tag-size-full");
 					}
-					VMM.appendElement(tag_element, "<div><h3>" + tags[k] + "</h3></div>");
-				}
-				
+
+					var plural = (tag_counts[tags[k]] -1) > 1 ? 's' : '';
+					plural = (tag_counts[tags[k]] -1) <= 0 ? 's' : plural;
+
+					VMM.appendElement(tag_element, "<div><h3>" + tags[k] + " (" + (tag_counts[tags[k]] - 1) + " item" + plural + ")</h3></div>");
+				}				
 			}
 			
 			// RESIZE FLAGS IF NEEDED
