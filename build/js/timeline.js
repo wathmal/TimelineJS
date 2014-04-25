@@ -3877,41 +3877,7 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 				VMM.master_config.googledocs.que = [];
 			}
 		
-		},
-
-/*
-		facebook: {
-			
-			get: function(m) {
-				VMM.master_config.facebook.que.push(m);
-				VMM.master_config.facebook.active = true;
-			},
-			
-			create: function(m) {
-
-				if (VMM.master_config.Timeline.api_keys.facebook != "") {
-						api_key = VMM.master_config.Timeline.api_keys.facebook;
-				}
-				var mediaElem = ""; 
-				if (m.id.match(/facebook.com/i)) {
-					mediaElem	=	"<iframe class='fb' frameborder='0' width='100%' height='100%' src='" + m.id + "&access_token=" + api_key + "'></iframe>";
-				} else {
-					mediaElem	=	"<iframe class='fb' frameborder='0' width='100%' height='100%' src='" + "https://graph.facebook.com/$post_id/comments?" + m.id + "&access_token=" + api_key + "'></iframe>";
-				}
-				VMM.attachElement("#"+m.uid, mediaElem);
-			},
-			
-			pushQue: function() {
-				
-				for(var i = 0; i < VMM.master_config.facebook.que.length; i++) {
-					VMM.ExternalAPI.googledocs.create(VMM.master_config.facebook.que[i]);
-				}
-				VMM.master_config.facebook.que = [];
-			}
-		
-		},
-*/
-		
+		},		
 		flickr: {
 			
 			get: function(m) {
@@ -4385,12 +4351,14 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 			create: function(m) {
 				trace("WEB THUMB CREATE");
 				
-				//var thumb_url	= "//api.pagepeeker.com/v2/thumbs.php?";
-					var thumb_url = typeof config.thumbnail_url !== 'undefined' ? config.thumbnail_url : '/thumbnails/';
+				//	var thumb_url = '/thumbnails/';
+				var thumb_url = '//vila.pacificpolicy.org:3030';
+				var hash_regex = /\#.*/;
 
-					url		      	= m.id.replace("http://", "");//.split("/")[0];
-//					url           = url.replace("https://","");
-					url           = url + '&clipRect=%7B"top"%3A0%2C"left"%3A0%2C"width"%3A1280%2C"height"%3A800%7D&delay=1000';
+				url		      	= m.id.replace("http://", "");//.split("/")[0];
+				url           = url.replace(hash_regex,"");
+					
+				url           = url + '&clipRect=%7B"top"%3A0%2C"left"%3A0%2C"width"%3A1280%2C"height"%3A800%7D&delay=1000';
 
 				// Main Image
 				VMM.attachElement("#" + m.uid, "<a href='" + m.id + "' target='_blank'><img src='" + thumb_url + "?url=" + url + "'></a>");
@@ -4730,7 +4698,6 @@ if(typeof VMM != 'undefined' && typeof VMM.MediaType == 'undefined') {
 		} else if ((d.match("maps.google") || d.match('google.com\/maps')) && !d.match("staticmap")) {
 				media.type = "google-map";
 		    media.id = d.split(/src=['|"][^'|"]*?['|"]/gi);
-				console.debug ("Google map: " , media);
 			success = true;
 		} else if (d.match("plus.google")) {
 			media.type = "googleplus";
@@ -7235,7 +7202,6 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			if (VMM.Browser.device == "mobile" || VMM.Browser.device == "tablet") {
 				config.touch = true;
 			}
-			console.debug("Width: ", config.width);
 			config.nav.width			= config.width;
 			config.nav.height			= 200;
 			config.feature.width		= config.width;
