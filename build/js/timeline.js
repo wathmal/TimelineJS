@@ -4351,15 +4351,23 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 			create: function(m) {
 				trace("WEB THUMB CREATE");
 				
+				// Chrome 36.0
+				var userAgent  = encodeURI("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1944.0 Safari/537.36");
+				var clipRect   = encodeURI('{"top":0,"left":0,"width":1280,"height":800}');
+				var delay      = 1000; // milliseconds
+				var dimensions = [VMM.master_config.sizes.api.width,VMM.master_config.sizes.api.width];
+				var imgSize    = encodeURI(dimensions);
+
 				//	var thumb_url = '/thumbnails/';
-				var thumb_url = '//vila.pacificpolicy.org:3030';
+				var thumb_url  = '//vila.pacificpolicy.org:3030';
 				var hash_regex = /\#.*/;
 
-				url		      	= m.id.replace("http://", "");//.split("/")[0];
-				url           = url.replace(hash_regex,"");
-					
-				url           = url + '&clipRect=%7B"top"%3A0%2C"left"%3A0%2C"width"%3A1280%2C"height"%3A800%7D&delay=1000';
+				url		      	 = m.id.replace("http://", "");//.split("/")[0];
+				url            = url.replace(hash_regex,"");
+				
+				url            = url + '&clipRect=' + clipRect + '&userAgent=' + userAgent + '&imgSize=' + imgSize + '&delay=' + delay;
 
+				console.debug("URL: ", thumb_url + "?url=" + url);
 				// Main Image
 				VMM.attachElement("#" + m.uid, "<a href='" + m.id + "' target='_blank'><img src='" + thumb_url + "?url=" + url + "'></a>");
 				
@@ -7453,7 +7461,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
     }
 
 		this.reload = function(d,_s) {
-				console.debug("Load new timeline data: " ,  d());
+				trace("Load new timeline data: " ,  d());
 				VMM.fireEvent(global, config.events.messege, config.language.messages.loading_timeline);
 				data = {};
 				var new_config = d();
