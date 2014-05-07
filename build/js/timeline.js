@@ -4353,13 +4353,14 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 				
 				// Chrome 36.0
 				var userAgent  = encodeURI("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1944.0 Safari/537.36");
-				var clipRect   = encodeURI('{"top":0,"left":0,"width":1280,"height":800}');
+				var clipRect   = encodeURI('{"top":0,"left":0,"width":1280,"height":800}'); // %7B"top":0,"left":0,"width":1280,"height":800%7D
 				var delay      = 1000; // milliseconds
-				var dimensions = [VMM.master_config.sizes.api.width,VMM.master_config.sizes.api.width];
-				var imgSize    = encodeURI(dimensions);
+//				var img_width  = (VMM.master_config.sizes.api.width / 2).toInt();
+				var imgSize    = Math.floor(VMM.master_config.sizes.api.width / 2);
+				console.debug('Width: ', imgSize);
 
 				//	var thumb_url = '/thumbnails/';
-				var thumb_url  = '//vila.pacificpolicy.org:3030';
+				var thumb_url  = '//vila.pacificpolicy.org:3039';
 				var hash_regex = /\#.*/;
 
 				url		      	 = m.id.replace("http://", "");//.split("/")[0];
