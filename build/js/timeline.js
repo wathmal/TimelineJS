@@ -7461,6 +7461,14 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
         timenav.setMarker(0, config.ease,config.duration);
     }
 
+    // Added this function to set the slide programatically from outside this app
+    // without reloading the whole timeline data
+    this.set_slide = function(slideIndex) {
+        config.current_slide = slideIndex;
+        slider.setSlide(slideIndex);
+        timenav.setMarker(slideIndex, config.ease,config.duration);
+    }
+
     this.reload = function(_d, index) {
       trace("Load new timeline data" , _d);
       VMM.fireEvent(global, config.events.messege, config.language.messages.loading_timeline);
