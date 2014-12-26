@@ -1,0 +1,29 @@
+{
+  "name": "TimelineJS",
+  "description": "A fork of TimelineJS with minor differences and a proper bower.json file",
+  "version": "1.0",
+  "keywords": [
+    "css",
+    "js",
+    "web"
+  ],
+  "homepage": "https://github.com/ghachey/TimelineJS",
+  "main": [
+    "build/css/timeline.css",
+    "build/css/themes/font/Helvetica.css",
+    "build/js/timeline.js"
+  ],
+  "ignore": [
+    ".*",
+    "CHANGELOG",
+    "DEVELOPER.md",
+    "README.markdown",
+    "codekit-config.json",
+    "config.json",
+    "examples",
+    "fabfile.py",
+    "requirements.txt",
+    "tests",
+    "website"
+  ]
+}
